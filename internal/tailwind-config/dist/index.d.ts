@@ -1,0 +1,2 @@
+export * from "/Users/sunn/code/self/open-oj/open-oj-ui/internal/tailwind-config/src/index.js";
+export { default } from "/Users/sunn/code/self/open-oj/open-oj-ui/internal/tailwind-config/src/index.js";
