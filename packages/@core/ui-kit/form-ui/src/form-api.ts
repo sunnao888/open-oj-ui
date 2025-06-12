@@ -11,7 +11,7 @@ import type { Recordable } from '@vben-core/typings';
 
 import type { FormActions, FormSchema, VbenFormProps } from './types';
 
-import { isRef, toRaw } from 'vue';
+import { toRaw } from 'vue';
 
 import { Store } from '@vben-core/shared/store';
 import {
@@ -100,26 +100,9 @@ export class FormApi {
   getFieldComponentRef<T = ComponentPublicInstance>(
     fieldName: string,
   ): T | undefined {
-    let target = this.componentRefMap.has(fieldName)
-      ? (this.componentRefMap.get(fieldName) as ComponentPublicInstance)
+    return this.componentRefMap.has(fieldName)
+      ? (this.componentRefMap.get(fieldName) as T)
       : undefined;
-    if (
-      target &&
-      target.$.type.name === 'AsyncComponentWrapper' &&
-      target.$.subTree.ref
-    ) {
-      if (Array.isArray(target.$.subTree.ref)) {
-        if (
-          target.$.subTree.ref.length > 0 &&
-          isRef(target.$.subTree.ref[0]?.r)
-        ) {
-          target = target.$.subTree.ref[0]?.r.value as ComponentPublicInstance;
-        }
-      } else if (isRef(target.$.subTree.ref.r)) {
-        target = target.$.subTree.ref.r.value as ComponentPublicInstance;
-      }
-    }
-    return target as T;
   }
 
   /**
@@ -260,6 +243,18 @@ export class FormApi {
 
   setLatestSubmissionValues(values: null | Recordable<any>) {
     this.latestSubmissionValues = { ...toRaw(values) };
+  }
+
+  /**
+   * 设置表单提交按钮的加载状态：用于非 Modal 中使用 Form 时，需要 Form 自己控制 loading 状态
+   * @author 芋道源码
+   * @param loading 是否加载中
+   */
+  setLoading(loading: boolean) {
+    this.setState((prev) => ({
+      ...prev,
+      submitButtonOptions: { ...prev.submitButtonOptions, loading },
+    }));
   }
 
   setState(

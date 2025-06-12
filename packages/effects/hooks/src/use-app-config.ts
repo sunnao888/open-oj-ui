@@ -21,3 +21,15 @@ export function useAppConfig(
     apiURL: VITE_GLOB_API_URL,
   };
 }
+
+export function isTenantEnable(): boolean {
+  return import.meta.env.VITE_APP_TENANT_ENABLE === 'true';
+}
+
+export function isCaptchaEnable(): boolean {
+  return import.meta.env.VITE_APP_CAPTCHA_ENABLE === 'true';
+}
+
+export function isDocAlertEnable(): boolean {
+  return import.meta.env.VITE_APP_DOCALERT_ENABLE !== 'false';
+}

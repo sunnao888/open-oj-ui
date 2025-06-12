@@ -64,14 +64,27 @@ interface HttpResponse<T = any> {
    * 0 表示成功 其他表示失败
    * 0 means success, others means fail
    */
-  code: string;
+  code: number;
   data: T;
   msg: string;
+}
+
+interface PageParam {
+  [key: string]: any;
+  pageNo: number;
+  pageSize: number;
+}
+
+interface PageResult<T> {
+  list: T[];
+  total: number;
 }
 
 export type {
   HttpResponse,
   MakeErrorMessageFn,
+  PageParam,
+  PageResult,
   RequestClientConfig,
   RequestClientOptions,
   RequestContentType,

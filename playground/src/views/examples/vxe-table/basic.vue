@@ -43,22 +43,7 @@ const gridEvents: VxeGridListeners<RowType> = {
   },
 };
 
-const [Grid, gridApi] = useVbenVxeGrid<RowType>({
-  // 放开注释查看表单组件的类型
-  // formOptions: {
-  //   schema: [
-  //     {
-  //       component: 'Switch',
-  //       fieldName: 'name',
-  //     },
-  //   ],
-  // },
-  gridEvents,
-  gridOptions,
-});
-
-// 放开注释查看当前表格实例的类型
-// gridApi.grid
+const [Grid, gridApi] = useVbenVxeGrid({ gridEvents, gridOptions });
 
 const showBorder = gridApi.useStore((state) => state.gridOptions?.border);
 const showStripe = gridApi.useStore((state) => state.gridOptions?.stripe);

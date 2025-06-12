@@ -5,8 +5,6 @@ import type {
   AvatarRootProps,
 } from 'radix-vue';
 
-import type { CSSProperties } from 'vue';
-
 import type { ClassType } from '@vben-core/typings';
 
 import { computed } from 'vue';
@@ -18,7 +16,6 @@ interface Props extends AvatarFallbackProps, AvatarImageProps, AvatarRootProps {
   class?: ClassType;
   dot?: boolean;
   dotClass?: ClassType;
-  fit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
   size?: number;
 }
 
@@ -31,15 +28,6 @@ const props = withDefaults(defineProps<Props>(), {
   as: 'button',
   dot: false,
   dotClass: 'bg-green-500',
-  fit: 'cover',
-});
-
-const imageStyle = computed<CSSProperties>(() => {
-  const { fit } = props;
-  if (fit) {
-    return { objectFit: fit };
-  }
-  return {};
 });
 
 const text = computed(() => {
@@ -63,7 +51,7 @@ const rootStyle = computed(() => {
     class="relative flex flex-shrink-0 items-center"
   >
     <Avatar :class="props.class" class="size-full">
-      <AvatarImage :alt="alt" :src="src" :style="imageStyle" />
+      <AvatarImage :alt="alt" :src="src" />
       <AvatarFallback>{{ text }}</AvatarFallback>
     </Avatar>
     <span
