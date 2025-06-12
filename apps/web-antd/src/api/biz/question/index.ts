@@ -11,6 +11,7 @@ export namespace QuestionApi {
     answer?: string; // 答案
     judgeCase: string; // 判题用例(json数组)
     judgeConfig: string; // 判题配置(json对象)
+    tagIds?: number[]; // 标签列表
   }
 }
 

@@ -44,3 +44,8 @@ export function deleteTagListByIds(ids: number[]) {
 export function exportTag(params: any) {
   return requestClient.download('/biz/tag/export-excel', params);
 }
+
+/** 获取全部标签列表 */
+export function getTagListAll() {
+  return requestClient.get<TagApi.Tag[]>('/biz/tag/get-list-all');
+}

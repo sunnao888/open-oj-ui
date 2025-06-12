@@ -1,6 +1,7 @@
 import type { VbenFormSchema } from '#/adapter/form';
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { QuestionApi } from '#/api/biz/question';
+import { getTagListAll } from '#/api/biz/tag';
 
 
 /** 新增/修改的表单 */
@@ -49,6 +50,23 @@ export function useFormSchema(): VbenFormSchema[] {
       component: 'Textarea',
       componentProps: {
         placeholder: '请输入判题配置(json对象)',
+      },
+    },
+    {
+      fieldName: 'tagIds',
+      label: '标签',
+      component: 'ApiSelect',
+      componentProps: {
+        mode: 'multiple',
+        allowClear: true,
+        placeholder: '请选择标签',
+        api: async () => {
+          const tags = await getTagListAll();
+          return tags.map(tag => ({
+            label: tag.name || '',
+            value: tag.id,
+          }));
+        },
       },
     },
   ];

@@ -1,26 +1,32 @@
 <script lang="ts" setup>
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
+
+import {
+  deleteQuestion,
+  deleteQuestionListByIds,
+  exportQuestion,
+  getQuestionPage,
+} from '#/api/biz/question';
+
 import type { QuestionApi } from '#/api/biz/question';
 
+import { ref } from 'vue';
+
 import { Page, useVbenModal } from '@vben/common-ui';
-import { message,Tabs } from 'ant-design-vue';
-import Form from './modules/form.vue';
-
-
-import { ref, computed } from 'vue';
-import { $t } from '#/locales';
-import { ACTION_ICON, TableAction, useVbenVxeGrid } from '#/adapter/vxe-table';
-import { getQuestionPage, deleteQuestion, deleteQuestionListByIds, exportQuestion } from '#/api/biz/question';
 import { downloadFileFromBlobPart, isEmpty } from '@vben/utils';
 
-import { useGridColumns, useGridFormSchema } from './data';
+import { message } from 'ant-design-vue';
 
+import { ACTION_ICON, TableAction, useVbenVxeGrid } from '#/adapter/vxe-table';
+import { $t } from '#/locales';
+
+import { useGridColumns, useGridFormSchema } from './data';
+import Form from './modules/form.vue';
 
 const [FormModal, formModalApi] = useVbenModal({
   connectedComponent: Form,
-  destroyOnClose: true
+  destroyOnClose: true,
 });
-
 
 /** 刷新表格 */
 function onRefresh() {
@@ -37,12 +43,11 @@ function handleEdit(row: QuestionApi.Question) {
   formModalApi.setData(row).open();
 }
 
-
 /** 删除题目 */
 async function handleDelete(row: QuestionApi.Question) {
   const hideLoading = message.loading({
     content: $t('ui.actionMessage.deleting', [row.id]),
-    key: 'action_key_msg'
+    key: 'action_key_msg',
   });
   try {
     await deleteQuestion(row.id as number);
@@ -60,7 +65,7 @@ async function handleDelete(row: QuestionApi.Question) {
 async function handleDeleteBatch() {
   const hideLoading = message.loading({
     content: $t('ui.actionMessage.deleting'),
-    key: 'action_key_msg'
+    key: 'action_key_msg',
   });
   try {
     await deleteQuestionListByIds(deleteIds.value);
@@ -74,13 +79,11 @@ async function handleDeleteBatch() {
   }
 }
 
-const deleteIds = ref<number[]>([]) // 待删除题目 ID
-function setDeleteIds({
-  records
-}: {
-  records: QuestionApi.Question[];
-}) {
-  deleteIds.value = records.map((item) => item.id).filter((id): id is number => id !== undefined);
+const deleteIds = ref<number[]>([]); // 待删除题目 ID
+function setDeleteIds({ records }: { records: QuestionApi.Question[] }) {
+  deleteIds.value = records
+    .map((item) => item.id)
+    .filter((id): id is number => id !== undefined);
 }
 
 /** 导出表格 */
@@ -91,7 +94,7 @@ async function handleExport() {
 
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
-    schema: useGridFormSchema()
+    schema: useGridFormSchema(),
   },
   gridOptions: {
     columns: useGridColumns(),
@@ -117,12 +120,12 @@ const [Grid, gridApi] = useVbenVxeGrid({
     toolbarConfig: {
       refresh: { code: 'query' },
       search: true,
-    }
+    },
   } as VxeTableGridOptions<QuestionApi.Question>,
-  gridEvents:{
-      checkboxAll: setDeleteIds,
-      checkboxChange: setDeleteIds
-  }
+  gridEvents: {
+    checkboxAll: setDeleteIds,
+    checkboxChange: setDeleteIds,
+  },
 });
 </script>
 
@@ -185,6 +188,5 @@ const [Grid, gridApi] = useVbenVxeGrid({
         />
       </template>
     </Grid>
-
   </Page>
 </template>

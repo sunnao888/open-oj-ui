@@ -1,24 +1,29 @@
 <script lang="ts" setup>
 import type { QuestionApi } from '#/api/biz/question';
 
-import { useVbenModal } from '@vben/common-ui';
-import { message, Tabs, Checkbox, Input, Textarea, Select,RadioGroup,CheckboxGroup, DatePicker } from 'ant-design-vue';
-
 import { computed, ref } from 'vue';
+
+import { message } from 'ant-design-vue';
+import { useVbenModal } from '@vben/common-ui';
+
 import { $t } from '#/locales';
 import { useVbenForm } from '#/adapter/form';
-import { getQuestion, createQuestion, updateQuestion } from '#/api/biz/question';
+import {
+  createQuestion,
+  getQuestion,
+  updateQuestion,
+} from '#/api/biz/question';
 
 import { useFormSchema } from '../data';
 
 const emit = defineEmits(['success']);
 const formData = ref<QuestionApi.Question>();
+
 const getTitle = computed(() => {
   return formData.value?.id
     ? $t('ui.actionTitle.edit', ['题目'])
     : $t('ui.actionTitle.create', ['题目']);
 });
-
 
 const [Form, formApi] = useVbenForm({
   commonConfig: {
@@ -26,11 +31,11 @@ const [Form, formApi] = useVbenForm({
       class: 'w-full',
     },
     formItemClass: 'col-span-2',
-    labelWidth: 80
+    labelWidth: 80,
   },
   layout: 'horizontal',
   schema: useFormSchema(),
-  showDefaultActions: false
+  showDefaultActions: false,
 });
 
 const [Modal, modalApi] = useVbenModal({
@@ -40,15 +45,15 @@ const [Modal, modalApi] = useVbenModal({
     if (!valid) {
       return;
     }
-        modalApi.lock();
+    modalApi.lock();
     // 提交表单
     const data = (await formApi.getValues()) as QuestionApi.Question;
-        try {
+    try {
       await (formData.value?.id ? updateQuestion(data) : createQuestion(data));
       // 关闭并提示
       await modalApi.close();
       emit('success');
-      message.success( $t('ui.actionMessage.operationSuccess') );
+      message.success($t('ui.actionMessage.operationSuccess'));
     } finally {
       modalApi.unlock();
     }
@@ -58,6 +63,7 @@ const [Modal, modalApi] = useVbenModal({
       formData.value = undefined;
       return;
     }
+
     // 加载数据
     let data = modalApi.getData<QuestionApi.Question>();
     if (!data) {
@@ -74,12 +80,12 @@ const [Modal, modalApi] = useVbenModal({
     // 设置到 values
     formData.value = data;
     await formApi.setValues(formData.value);
-  }
+  },
 });
 </script>
 
 <template>
   <Modal :title="getTitle">
     <Form class="mx-4" />
-      </Modal>
+  </Modal>
 </template>

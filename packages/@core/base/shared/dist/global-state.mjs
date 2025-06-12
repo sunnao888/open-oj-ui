@@ -3,7 +3,7 @@ import { createJiti } from "../../../../../node_modules/.pnpm/jiti@2.4.2/node_mo
 const jiti = createJiti(import.meta.url, {
   "interopDefault": true,
   "alias": {
-    "@vben-core/shared": "/Users/sunn/code/self/open-oj/open-oj-ui/packages/@core/base/shared"
+    "@vben-core/shared": "F:/code/open-oj-ui/packages/@core/base/shared"
   },
   "transformOptions": {
     "babel": {
@@ -12,7 +12,7 @@ const jiti = createJiti(import.meta.url, {
   }
 })
 
-/** @type {import("/Users/sunn/code/self/open-oj/open-oj-ui/packages/@core/base/shared/src/global-state.js")} */
-const _module = await jiti.import("/Users/sunn/code/self/open-oj/open-oj-ui/packages/@core/base/shared/src/global-state.ts");
+/** @type {import("F:/code/open-oj-ui/packages/@core/base/shared/src/global-state.js")} */
+const _module = await jiti.import("F:/code/open-oj-ui/packages/@core/base/shared/src/global-state.ts");
 
 export const globalShareState = _module.globalShareState;

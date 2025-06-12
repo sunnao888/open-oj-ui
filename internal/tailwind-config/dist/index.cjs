@@ -3,7 +3,7 @@ const { createJiti } = require("../../../node_modules/.pnpm/jiti@2.4.2/node_modu
 const jiti = createJiti(__filename, {
   "interopDefault": true,
   "alias": {
-    "@vben/tailwind-config": "/Users/sunn/code/self/open-oj/open-oj-ui/internal/tailwind-config"
+    "@vben/tailwind-config": "F:/code/open-oj-ui/internal/tailwind-config"
   },
   "transformOptions": {
     "babel": {
@@ -12,5 +12,5 @@ const jiti = createJiti(__filename, {
   }
 })
 
-/** @type {import("/Users/sunn/code/self/open-oj/open-oj-ui/internal/tailwind-config/src/index.js")} */
-module.exports = jiti("/Users/sunn/code/self/open-oj/open-oj-ui/internal/tailwind-config/src/index.ts")
+/** @type {import("F:/code/open-oj-ui/internal/tailwind-config/src/index.js")} */
+module.exports = jiti("F:/code/open-oj-ui/internal/tailwind-config/src/index.ts")
