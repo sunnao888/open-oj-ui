@@ -1,1 +1,1 @@
-export * from "F:/code/open-oj-ui/internal/vite-config/src/index.js";
+export * from "/Users/sunn/code/self/open-oj/open-oj-admin/internal/vite-config/src/index.js";

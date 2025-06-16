@@ -1,2 +1,2 @@
-export * from "F:/code/open-oj-ui/internal/tailwind-config/src/index.js";
-export { default } from "F:/code/open-oj-ui/internal/tailwind-config/src/index.js";
+export * from "/Users/sunn/code/self/open-oj/open-oj-admin/internal/tailwind-config/src/index.js";
+export { default } from "/Users/sunn/code/self/open-oj/open-oj-admin/internal/tailwind-config/src/index.js";

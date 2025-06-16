@@ -23,6 +23,7 @@ import { notification } from 'ant-design-vue';
 
 import { Tinymce as RichTextarea } from '#/components/tinymce';
 import { FileUpload, ImageUpload } from '#/components/upload';
+import JudgeCaseList from '#/views/biz/question/components/JudgeCaseList.vue';
 
 const AutoComplete = defineAsyncComponent(
   () => import('ant-design-vue/es/auto-complete'),
@@ -121,6 +122,7 @@ export type ComponentType =
   | 'Input'
   | 'InputNumber'
   | 'InputPassword'
+  | 'JudgeCaseList'
   | 'Mentions'
   | 'PrimaryButton'
   | 'Radio'
@@ -206,6 +208,7 @@ async function initComponentAdapter() {
     Upload,
     FileUpload,
     ImageUpload,
+    JudgeCaseList,
   };
 
   // 将组件注册到全局共享状态中

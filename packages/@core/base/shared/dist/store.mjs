@@ -3,7 +3,7 @@ import { createJiti } from "../../../../../node_modules/.pnpm/jiti@2.4.2/node_mo
 const jiti = createJiti(import.meta.url, {
   "interopDefault": true,
   "alias": {
-    "@vben-core/shared": "F:/code/open-oj-ui/packages/@core/base/shared"
+    "@vben-core/shared": "/Users/sunn/code/self/open-oj/open-oj-admin/packages/@core/base/shared"
   },
   "transformOptions": {
     "babel": {
@@ -12,8 +12,8 @@ const jiti = createJiti(import.meta.url, {
   }
 })
 
-/** @type {import("F:/code/open-oj-ui/packages/@core/base/shared/src/store.js")} */
-const _module = await jiti.import("F:/code/open-oj-ui/packages/@core/base/shared/src/store.ts");
+/** @type {import("/Users/sunn/code/self/open-oj/open-oj-admin/packages/@core/base/shared/src/store.js")} */
+const _module = await jiti.import("/Users/sunn/code/self/open-oj/open-oj-admin/packages/@core/base/shared/src/store.ts");
 
 export const shallow = _module.shallow;
 export const useStore = _module.useStore;
@@ -25,3 +25,4 @@ export const __derivedToStore = _module.__derivedToStore;
 export const __flush = _module.__flush;
 export const __storeToDerived = _module.__storeToDerived;
 export const batch = _module.batch;
+export const isUpdaterFunction = _module.isUpdaterFunction;

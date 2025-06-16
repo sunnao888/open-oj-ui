@@ -3,16 +3,17 @@ import type { QuestionApi } from '#/api/biz/question';
 
 import { computed, ref } from 'vue';
 
-import { message } from 'ant-design-vue';
 import { useVbenModal } from '@vben/common-ui';
 
-import { $t } from '#/locales';
+import { message } from 'ant-design-vue';
+
 import { useVbenForm } from '#/adapter/form';
 import {
   createQuestion,
   getQuestion,
   updateQuestion,
 } from '#/api/biz/question';
+import { $t } from '#/locales';
 
 import { useFormSchema } from '../data';
 
@@ -47,9 +48,36 @@ const [Modal, modalApi] = useVbenModal({
     }
     modalApi.lock();
     // 提交表单
-    const data = (await formApi.getValues()) as QuestionApi.Question;
+    const formValues = (await formApi.getValues()) as QuestionApi.Question & {
+      judgeCaseList?: Array<{ input: string; output: string }>;
+      memoryLimit?: number;
+      stackLimit?: number;
+      timeLimit?: number;
+    };
+
+    // 组合判题配置
+    const judgeConfig = {
+      memoryLimit: formValues.memoryLimit,
+      stackLimit: formValues.stackLimit,
+      timeLimit: formValues.timeLimit,
+    };
+
+    // 处理判题用例
+    const judgeCase = formValues.judgeCaseList || [];
+
+    // 移除临时字段并添加判题配置和用例
+    const { memoryLimit, stackLimit, timeLimit, judgeCaseList, ...data } =
+      formValues;
+    const submitData = {
+      ...data,
+      judgeConfig: JSON.stringify(judgeConfig),
+      judgeCase: JSON.stringify(judgeCase),
+    };
+
     try {
-      await (formData.value?.id ? updateQuestion(data) : createQuestion(data));
+      await (formData.value?.id
+        ? updateQuestion(submitData)
+        : createQuestion(submitData));
       // 关闭并提示
       await modalApi.close();
       emit('success');
@@ -69,10 +97,45 @@ const [Modal, modalApi] = useVbenModal({
     if (!data) {
       return;
     }
+
+    // 为新建题目设置默认判题用例
+    if (!data.id) {
+      (data as any).judgeCaseList = [{ input: '', output: '' }];
+    }
     if (data.id) {
       modalApi.lock();
       try {
         data = await getQuestion(data.id);
+        // 处理标签数据
+        if (data.tags) {
+          data.tagIds = data.tags.map((tag) => tag.id);
+        }
+        // 处理判题配置数据
+        if (data.judgeConfig) {
+          try {
+            const judgeConfig = JSON.parse(data.judgeConfig);
+            (data as any).memoryLimit = judgeConfig.memoryLimit;
+            (data as any).stackLimit = judgeConfig.stackLimit;
+            (data as any).timeLimit = judgeConfig.timeLimit;
+          } catch (error) {
+            console.error('解析判题配置失败:', error);
+          }
+        }
+        // 处理判题用例数据
+        if (data.judgeCase) {
+          try {
+            const judgeCaseList = JSON.parse(data.judgeCase);
+            (data as any).judgeCaseList = Array.isArray(judgeCaseList)
+              ? judgeCaseList
+              : [];
+          } catch (error) {
+            console.error('解析判题用例失败:', error);
+            (data as any).judgeCaseList = [];
+          }
+        } else {
+          // 如果没有判题用例，提供默认值
+          (data as any).judgeCaseList = [{ input: '', output: '' }];
+        }
       } finally {
         modalApi.unlock();
       }

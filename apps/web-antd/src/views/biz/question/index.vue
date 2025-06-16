@@ -1,13 +1,5 @@
 <script lang="ts" setup>
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-
-import {
-  deleteQuestion,
-  deleteQuestionListByIds,
-  exportQuestion,
-  getQuestionPage,
-} from '#/api/biz/question';
-
 import type { QuestionApi } from '#/api/biz/question';
 
 import { ref } from 'vue';
@@ -18,6 +10,12 @@ import { downloadFileFromBlobPart, isEmpty } from '@vben/utils';
 import { message } from 'ant-design-vue';
 
 import { ACTION_ICON, TableAction, useVbenVxeGrid } from '#/adapter/vxe-table';
+import {
+  deleteQuestion,
+  deleteQuestionListByIds,
+  exportQuestion,
+  getQuestionPage,
+} from '#/api/biz/question';
 import { $t } from '#/locales';
 
 import { useGridColumns, useGridFormSchema } from './data';
@@ -171,7 +169,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
               type: 'link',
               icon: ACTION_ICON.EDIT,
               auth: ['biz:question:update'],
-              onClick: handleEdit.bind(null, row),
+              onClick: () => handleEdit(row),
             },
             {
               label: $t('common.delete'),
@@ -181,7 +179,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
               auth: ['biz:question:delete'],
               popConfirm: {
                 title: $t('ui.actionMessage.deleteConfirm', [row.id]),
-                confirm: handleDelete.bind(null, row),
+                confirm: () => handleDelete(row),
               },
             },
           ]"
